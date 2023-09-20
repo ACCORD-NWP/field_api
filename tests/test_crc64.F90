@@ -6,12 +6,11 @@ PROGRAM TEST_CRC64
         USE OMP_LIB
         USE PARKIND1
 
-        CLASS(FIELD_2RB), POINTER :: W => NULL()
-        REAL(KIND=JPRB), POINTER :: D(:,:)
+        CLASS(FIELD_2RD), POINTER :: W => NULL()
+        REAL(KIND=JPRD), POINTER :: D(:,:)
         INTEGER :: NPROMA = 24
         INTEGER :: NBLOCKS= 100
         INTEGER :: IBLK,JLON
-        REAL(KIND=JPRB), POINTER :: VIEW(:) => NULL()
 
         INTEGER*8 :: ICRC64_PI, ICRC64_E, ICRC
         DATA ICRC64_PI / Z'33E2D12C420E6E86' /
@@ -39,9 +38,10 @@ PROGRAM TEST_CRC64
 !$acc end kernels
 
         ICRC = CRC64 (W)
-!       WRITE (*, '(Z16.16)') ICRC
+        WRITE (*, '(Z16.16)') ICRC
         IF (ICRC /= ICRC64_E) ERROR STOP
         
 
         CALL FIELD_DELETE(W)
+
 END PROGRAM TEST_CRC64
